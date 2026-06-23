@@ -3,4 +3,7 @@ venv/
 __pycache__/
 node_modules/
 dist/
-package-lock.jsonrepo_create.json
+package-lock.json
+repo_create.json
+test-results/
+.playwright-artifacts/
