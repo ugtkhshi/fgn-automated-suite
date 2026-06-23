@@ -12,11 +12,14 @@ test.describe('Partner Portal - Login page', () => {
     await expect(page.getByRole('button', { name: /sign in|login/i })).toBeVisible();
   });
 
-  test('should log in till user is in MFA state', async ({ page }) => {
+  test('login with valid credentials', async ({ page }) => {
     await page.fill('input[name="username"]', 'yuji.takahashi@arcadian.la');
     await page.fill('input[name="password"]', 'Arc@d1an2026!');
     await page.click('button[type="submit"]');
-    await expect(page.getByText('Authenticator app MFA')).toBeVisible();
+    await expect(page.getByText('Authenticator app MFA')).toBeVisible(); 
+
+    // Pause here so you can do the MFA manually once
+    await page.pause(); 
   });
 
   test('should navigate to user prompt page when back button is clicked during MFA state', async ({ page }) => {
@@ -32,26 +35,6 @@ test.describe('Partner Portal - Login page', () => {
     await expect(page.getByText(/you're still signed in|Sign in again/i)).toBeVisible();
     await expect(page.getByRole('button', { name: /yuji\.takahashi@arcadian\.la/i })).toBeVisible();
     await expect(page.getByRole('link', { name: /sign in as a different user/i })).toBeVisible();
-  });
-
-  test('login with valid credentials and save super user state', async ({ page }) => {
-    await page.fill('input[name="username"]', 'yuji.takahashi@arcadian.la');
-    await page.fill('input[name="password"]', 'Arc@d1an2026!');
-    await page.click('button[type="submit"]');
-    await expect(page.getByText('Authenticator app MFA')).toBeVisible(); 
-
-    // Pause here so you can do the MFA manually once
-    await page.pause(); 
-    
-    // Workaround for Test suite Run: Click the "Log in" button and then click "Retry Sign-in"
-    await page.getByRole('button', { name: /log in/i }).click(), ({ waitUntil: 'networkidle' });
-    await page.getByRole('button', { name: /retry sign-in/i }).click(), ({ waitUntil: 'networkidle' });
-
-    // Wait until you are fully logged in
-    await page.waitForURL('https://partners.uat.fastgamernetwork.com/document-library', { waitUntil: 'networkidle' });
-
-    // Save the signed-in state to a file
-    await page.context().storageState({ path: 'playwright/.auth/superUser.json' });
   });
 });
 
