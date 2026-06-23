@@ -42,7 +42,7 @@ setup.describe('Partner Portal - Login page', () => {
             await page.waitForURL('https://partners.uat.fastgamernetwork.com/document-library', { waitUntil: 'networkidle' });
         
             // Save the signed-in state to a file
-            await page.context().storageState({ path: 'playwright/.auth/superUser.json' });
+            await page.context().storageState({ path: 'playwright/.auth/orgAdmin.json' });
     });
 
     setup('login with valid credentials and Admin state', async ({ page }) => {
@@ -62,7 +62,7 @@ setup.describe('Partner Portal - Login page', () => {
             await page.waitForURL('https://partners.uat.fastgamernetwork.com/document-library', { waitUntil: 'networkidle' });
         
             // Save the signed-in state to a file
-            await page.context().storageState({ path: 'playwright/.auth/superUser.json' });
+            await page.context().storageState({ path: 'playwright/.auth/admin.json' });
     });
 
     setup('login with valid credentials and Content OPS state', async ({ page }) => {
@@ -82,7 +82,7 @@ setup.describe('Partner Portal - Login page', () => {
             await page.waitForURL('https://partners.uat.fastgamernetwork.com/document-library', { waitUntil: 'networkidle' });
         
             // Save the signed-in state to a file
-            await page.context().storageState({ path: 'playwright/.auth/superUser.json' });
+            await page.context().storageState({ path: 'playwright/.auth/contentOps.json' });
     });
 
     setup('login with valid credentials and Content Reporting state', async ({ page }) => {
@@ -102,7 +102,7 @@ setup.describe('Partner Portal - Login page', () => {
             await page.waitForURL('https://partners.uat.fastgamernetwork.com/document-library', { waitUntil: 'networkidle' });
         
             // Save the signed-in state to a file
-            await page.context().storageState({ path: 'playwright/.auth/superUser.json' });
+            await page.context().storageState({ path: 'playwright/.auth/contentReporting.json' });
     });
 
 });
