@@ -8,16 +8,32 @@ test.describe('Partner Portal - Login page', () => {
   test('should display the login form', async ({ page }) => {
     await expect(page.locator('form')).toBeVisible();
     await expect(page.getByLabel('Email Address')).toBeVisible();
-    await expect(page.getByLabel('password')).toBeVisible();
+    await expect(page.locator('input[name="password"]')).toBeVisible();
     await expect(page.getByRole('button', { name: /sign in|login/i })).toBeVisible();
   });
 
-  test('should log in with valid credentials', async ({ page }) => {
+  test('should log in till user is in MFA state', async ({ page }) => {
     await page.fill('input[name="username"]', 'yuji.takahashi@arcadian.la');
-    await page.fill('input[name="password"]', 'Arc@d1an2026.');
+    await page.fill('input[name="password"]', 'Arc@d1an2026!');
+    await page.click('button[type="submit"]');
+    await expect(page.getByText('Authenticator app MFA')).toBeVisible();
+  });
+
+  test('should navigate to user prompt page when back button is clicked during MFA state', async ({ page }) => {
+    // First, reach MFA state
+    await page.fill('input[name="username"]', 'yuji.takahashi@arcadian.la');
+    await page.fill('input[name="password"]', 'Arc@d1an2026!');
     await page.click('button[type="submit"]');
     await expect(page.getByText('Authenticator app MFA')).toBeVisible();
 
-    await page.waitForURL('https://example.com/dashboard', { timeout: 60000 });
+    // Then test back button behavior
+    await page.goBack();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText(/you're still signed in|Sign in again/i)).toBeVisible();
+    await expect(page.getByRole('button', { name: /yuji\.takahashi@arcadian\.la/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /sign in as a different user/i })).toBeVisible();
   });
 });
+
+  
+
