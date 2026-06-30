@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Partner Portal - Login page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://partners.uat.fastgamernetwork.com/public/documents', { waitUntil: 'domcontentloaded' });
+    await page.goto('https://partners.uat.fastgamernetwork.com/public/documents', { waitUntil: 'networkidle' });
     await Promise.all([
       page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
       page.getByRole('button', { name: /log in/i }).click(),
@@ -41,7 +41,11 @@ test.describe('Partner Portal - Login page', () => {
     await expect(page.getByRole('button', { name: /yuji\.takahashi@arcadian\.la/i })).toBeVisible();
     await expect(page.getByRole('link', { name: /sign in as a different user/i })).toBeVisible();
   });
+
+  test.afterAll(async ({ browser }) => {
+    await browser.close();
+  });
 });
 
-  
+
 
